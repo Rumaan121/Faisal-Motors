@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Floor — Car Showroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="mark"><h1>THE <span>FLOOR</span></h1></div>
+  <p>Tap a hotspot on the car, or use the button to step inside.</p>
+</header>
+
+<div id="arena-wrap">
+  <div id="arena"></div>
+
+  <div class="hud" id="car-tabs"></div>
+  <button class="hud" id="view-toggle">Step Inside</button>
+  <div class="hud" id="price-strip">
+    <p class="name" id="ps-name">—</p>
+    <span class="price" id="ps-price">—</span>
+  </div>
+  <div class="hud" id="hint">Drag to rotate · Scroll to zoom · Tap the glowing points on the car</div>
+
+  <div id="interior-panel">
+    <h3 id="ip-title">Interior</h3>
+    <div class="sub" id="ip-sub"></div>
+    <div id="ip-specs"></div>
+  </div>
+</div>
+
+<main>
+  <h2>Full Lineup</h2>
+  <div class="grid" id="lineup"></div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
