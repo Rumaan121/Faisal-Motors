@@ -1,262 +1,100 @@
-/* 🌋 GAME PAGE GLOBAL RESET */
+/* 🌐 GLOBAL RESET */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle, #300000, #000);
-    color: #fff;
-    overflow: hidden;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111; /* dark showroom background */
+  color: #fff;
 }
 
-/* 🌋 GAME GRID LAYOUT */
-#game-wrapper {
-    display: grid;
-    grid-template-columns: 260px 1fr 260px;
-    grid-template-rows: auto 1fr auto;
-    height: 100vh;
+/* HEADER */
+header {
+  text-align: center;
+  padding: 20px;
+  background: #222;
+  border-bottom: 2px solid #444;
+}
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #00aaff; /* BMW blue accent */
+}
+header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #ccc;
 }
 
-/* 🌋 SIDE PANELS */
-#left-panel, #right-panel {
-    padding: 10px;
-    background: rgba(0,0,0,0.6);
-    border-right: 1px solid #550000;
-}
-#right-panel {
-    border-right: none;
-    border-left: 1px solid #550000;
-}
-
-/* 🌋 TOP + BOTTOM PANELS */
-#top-panel {
-    grid-column: 1 / 4;
-    padding: 10px;
-    background: rgba(0,0,0,0.8);
-    border-bottom: 1px solid #550000;
-}
-#bottom-panel {
-    grid-column: 1 / 4;
-    padding: 10px;
-    background: rgba(0,0,0,0.8);
-    border-top: 1px solid #550000;
-    text-align: center;
-    overflow-y: auto;
-    max-height: 300px;
-}
-
-/* 🌋 ARENA */
+/* ARENA (Three.js canvas container) */
 #arena {
-    position: relative;
-    overflow: hidden;
+  width: 100%;
+  height: 70vh; /* showroom takes most of screen */
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid #444;
+  position: relative;
 }
 
-/* 🔥 BOSS HP BAR */
-#boss-hp-bar {
-    width: 80%;
-    margin: 0 auto;
-    height: 20px;
-    background: #330000;
-    border: 2px solid #ff4500;
-    border-radius: 8px;
+/* TOGGLE BUTTON */
+#view-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  background: #00aaff;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 10;
 }
-#boss-hp-fill {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(90deg, #ff4500, #d62828);
-    border-radius: 6px;
-    transition: width 0.3s ease;
-}
-#boss-name {
-    text-align: center;
-    margin-top: 5px;
-    font-weight: bold;
-    color: #ff4500;
+#view-toggle:hover {
+  background: #0088cc;
 }
 
-/* ⚔️ PLAYER HUD */
-#player-hud {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+/* PRODUCT SECTION */
+#products {
+  padding: 20px;
+  background: #1a1a1a;
 }
-.hud-bar {
-    background: #220000;
-    border: 2px solid #ff4500;
-    border-radius: 6px;
-    padding: 4px 8px;
-}
-.hud-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 3px;
-}
-.hud-fill {
-    height: 10px;
-    background: linear-gradient(90deg, #00ff00, #008000);
-    border-radius: 4px;
-    width: 100%;
-    transition: width 0.3s ease;
-}
-.hud-fill.mana {
-    background: linear-gradient(90deg, #00bfff, #004c99);
+#products h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00aaff;
 }
 
-/* ⚡ DIFFICULTY BUTTONS */
-#difficulty button {
-    margin: 3px;
-    padding: 5px 10px;
-    border-radius: 6px;
-    border: 1px solid #ff4500;
-    background: #200000;
-    color: #ff4500;
-    cursor: pointer;
+/* PRODUCT CARDS */
+.product-card {
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px auto;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0,170,255,0.3);
 }
-#difficulty button.active {
-    background: #ff4500;
-    color: #000;
+.product-card h4 {
+  margin: 0 0 8px;
+  color: #fff;
 }
-
-/* 🔥 BOSS SPRITE */
-#boss {
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, #ff4500, #000);
-    border-radius: 50%;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 40px #ff4500;
-    transition: transform 0.2s ease;
+.product-card p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #ccc;
 }
-#boss.phase2 {
-    box-shadow: 0 0 60px #ff0000;
-    transform: translate(-50%, -50%) scale(1.2);
+.buy-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #00aaff;
+  color: #000;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.3s ease;
 }
-#boss.phase3 {
-    box-shadow: 0 0 80px #ff00ff;
-    transform: translate(-50%, -50%) scale(1.4);
+.buy-btn:hover {
+  background: #0088cc;
 }
-
-/* 🔥 FIREBALL ATTACK */
-.fireball {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #ff4500, transparent);
-    border-radius: 50%;
-    animation: fireballShoot 0.6s linear forwards;
-}
-@keyframes fireballShoot {
-    from { transform: translate(0,0) scale(1); opacity: 1; }
-    to { transform: translate(200px,-200px) scale(2); opacity: 0; }
-}
-
-/* 🌋 TITAN DIALOGUE */
-#titan-dialogue {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    border: 2px solid #ff4500;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    min-width: 260px;
-    text-align: center;
-}
-
-/* 🏆 VICTORY SCREEN */
-#victory-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, #ff4500, #000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s ease;
-    z-index: 9999;
-}
-#victory-screen.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-.victory-content {
-    text-align: center;
-}
-.loot-item {
-    background: #1a0f0f;
-    padding: 10px;
-    margin: 6px;
-    border-radius: 8px;
-    border: 2px solid #ff4500;
-    box-shadow: 0 0 15px #ff4500;
-}
-.loot-item a {
-    color: #ffdd99;
-    text-decoration: none;
-}
-
-#reset-btn {
-    margin-top: 15px;
-    padding: 8px 16px;
-    border-radius: 6px;
-    border: 2px solid #000;
-    background: #000;
-    color: #ff4500;
-    cursor: pointer;
-}
-
-/* 🌋 EARTHQUAKE EFFECT */
-.quake {
-    animation: quake 0.2s infinite;
-}
-@keyframes quake {
-    0% { transform: translate(0,0); }
-    25% { transform: translate(3px,-3px); }
-    50% { transform: translate(-3px,3px); }
-    75% { transform: translate(3px,3px); }
-    100% { transform: translate(0,0); }
-}
-
-.info {
-    font-size: 13px;
-    color: #ffdd99;
-}
-
-/* 🌋 VOLCANO VFX (unchanged) */
-.lava-drip { position: fixed; top:0; left:0; width:100%; height:25px; background:linear-gradient(180deg,#ff4500,transparent); animation:drip 2s infinite; z-index:999; }
-@keyframes drip { 0%{height:25px;opacity:1;} 50%{height:60px;opacity:.6;} 100%{height:25px;opacity:1;} }
-
-.fire-particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; background-image:radial-gradient(circle,rgba(255,69,0,.8) 2px,transparent 2px); background-size:4px 4px; animation:fireFloat 6s infinite linear; z-index:998; }
-@keyframes fireFloat { from{transform:translateY(0);} to{transform:translateY(-200px);} }
-
-.lightning { position:fixed; top:0; left:0; width:100%; height:100%; background:white; opacity:0; animation:lightningFlash 8s infinite; z-index:997; }
-@keyframes lightningFlash { 0%,95%,100%{opacity:0;} 96%{opacity:.8;} 97%{opacity:0;} }
-
-.smoke { position:fixed; bottom:0; width:100%; height:200px; background:url('https://files.catbox.moe/4j1p0v.png'); background-size:cover; opacity:.4; animation:smokeRise 10s infinite linear; z-index:996; }
-@keyframes smokeRise { from{transform:translateY(0);} to{transform:translateY(-80px);} }
-
-.lava-river { position:fixed; bottom:0; width:100%; height:120px; background:url('https://files.catbox.moe/9zj5qv.gif') repeat-x; background-size:cover; animation:lavaFlow 6s linear infinite; z-index:900; }
-@keyframes lavaFlow { from{background-position:0 0;} to{background-position:-1000px 0;} }
-
-.meteors { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9998; }
-.meteor { position:absolute; width:4px; height:20px; background:linear-gradient(180deg,#ff4500,transparent); border-radius:50%; animation:meteorFall 1s linear forwards; }
-@keyframes meteorFall { from{transform:translate(0,0) rotate(45deg);opacity:1;} to{transform:translate(300px,600px) rotate(45deg);opacity:0;} }
-
-#lava-loader { position:fixed; top:0; left:0; width:100%; height:100%; background:#0a0a0a; display:flex; justify-content:center; align-items:center; z-index:999999; animation:loaderFade 3s forwards; }
-.lava-circle { width:120px; height:120px; background:radial-gradient(circle,#ff4500,#d62828,#0a0a0a); border-radius:50%; animation:lavaPulse 1.5s infinite; }
-@keyframes lavaPulse { 0%{transform:scale(1);box-shadow:0 0 20px #ff4500;} 50%{transform:scale(1.3);box-shadow:0 0 40px #d62828;} 100%{transform:scale(1);box-shadow:0 0 20px #ff4500;} }
-@keyframes loaderFade { 0%{opacity:1;} 80%{opacity:1;} 100%{opacity:0;visibility:hidden;} }
-
-#intro-eruption { position:fixed; top:0; left:0; width:100%; height:100%; background:black; display:flex; justify-content:center; align-items:center; flex-direction:column; z-index:99999; animation:introFadeOut 4s forwards; }
-.eruption-flash { width:300px; height:300px; background:radial-gradient(circle,#ff4500,transparent); border-radius:50%; animation:eruptionBoom 2s ease-out; }
-.eruption-title { color:#ff4500; font-size:40px; margin-top:20px; animation:eruptionText 2s ease-out; }
-@keyframes eruptionBoom { from{transform:scale(0);opacity:1;} to{transform:scale(5);opacity:0;} }
-@keyframes eruptionText { from{opacity:0;transform:scale(.5);} to{opacity:1;transform:scale(1);} }
-@keyframes introFadeOut { 0%{opacity:1;} 80%{opacity:1;} 100%{opacity:0;visibility:hidden;} }

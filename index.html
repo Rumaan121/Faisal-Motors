@@ -1,159 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rumaan's Volcano Store — Boss Fight</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMW i7 Showroom</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- GLOBAL VOLCANO VFX -->
-    <div class="lava-drip"></div>
-    <div class="fire-particles"></div>
-    <div class="lightning"></div>
-    <div class="smoke"></div>
-    <div class="lava-river"></div>
-    <div class="meteors"></div>
+  <!-- HEADER -->
+  <header>
+    <h1>BMW i7 Interactive Showroom</h1>
+    <p>Tap on doors, seats, or dashboard to explore the interior.</p>
+  </header>
 
-    <!-- INTRO -->
-    <div id="lava-loader"><div class="lava-circle"></div></div>
-    <div id="intro-eruption">
-        <div class="eruption-flash"></div>
-        <h1 class="eruption-title">Rumaan’s Volcano Store</h1>
+  <!-- ARENA (Three.js renders here) -->
+  <div id="arena"></div>
+
+  <!-- PRODUCT PANEL -->
+  <section id="products">
+    <h2>Featured Items</h2>
+    <div class="product-card">
+      <h4>Used iPhone 12 — £250</h4>
+      <p>128GB • Good condition • No cracks</p>
+      <a href="https://wa.me/447512345678?text=Hi%20Rumaan,%20I%20want%20the%20Used%20iPhone%2012"
+         class="buy-btn" target="_blank">Buy</a>
     </div>
 
-    <!-- GAME WRAPPER -->
-    <div id="game-wrapper">
-
-        <!-- TOP PANEL -->
-        <div id="top-panel">
-            <div id="boss-hp-bar">
-                <div id="boss-hp-fill"></div>
-            </div>
-            <div id="boss-name">🔥 Lava Titan — Guardian of the Store 🔥</div>
-
-            <div id="difficulty">
-                Difficulty:
-                <button data-mode="easy" class="active">Easy</button>
-                <button data-mode="normal">Normal</button>
-                <button data-mode="hard">Hard</button>
-            </div>
-        </div>
-
-        <!-- LEFT PANEL (Player HUD) -->
-        <div id="left-panel">
-            <h3>Player Status</h3>
-
-            <div id="player-hud">
-                <div class="hud-bar">
-                    <div class="hud-label">
-                        <span>HP</span><span id="hp-label">100%</span>
-                    </div>
-                    <div class="hud-fill" id="player-hp"></div>
-                </div>
-
-                <div class="hud-bar">
-                    <div class="hud-label">
-                        <span>Mana</span><span id="mana-label">100%</span>
-                    </div>
-                    <div class="hud-fill mana" id="player-mana"></div>
-                </div>
-            </div>
-
-            <p class="info">
-                Scroll to weaken the Titan.<br>
-                Click in the arena to launch fireballs.
-            </p>
-        </div>
-
-        <!-- ARENA (Boss Fight) -->
-        <div id="arena">
-            <div id="boss"></div>
-            <div id="titan-dialogue">You dare enter my molten domain?</div>
-        </div>
-
-        <!-- RIGHT PANEL (Featured Store Items) -->
-        <div id="right-panel">
-            <h3>Featured Items</h3>
-
-            <div class="loot-item">
-                🔥 Used iPhone 12 — £250<br>
-                <a href="https://wa.me/447512345678?text=Hi%20Rumaan,%20I%20want%20the%20iPhone%2012"
-                   target="_blank">Buy on WhatsApp</a>
-            </div>
-
-            <div class="loot-item">
-                🎧 Gaming Headset — £35<br>
-                <a href="https://wa.me/447512345678?text=Hi%20Rumaan,%20I%20want%20the%20Gaming%20Headset"
-                   target="_blank">Buy on WhatsApp</a>
-            </div>
-
-            <div class="loot-item">
-                🔊 Bluetooth Speaker — £20<br>
-                <a href="https://wa.me/447833914552?text=Hi%20Rumaan,%20I%20want%20the%20Bluetooth%20Speaker"
-                   target="_blank">Buy on WhatsApp</a>
-            </div>
-        </div>
-
-        <!-- BOTTOM PANEL (Full Product List) -->
-        <div id="bottom-panel">
-            <h3>Full Product List</h3>
-
-            <div class="product-card">
-                <h4>Used iPhone 12 — £250</h4>
-                <p>128GB • Good condition • No cracks</p>
-                <a href="https://wa.me/447512345678?text=Hi%20Rumaan,%20I%20want%20the%20Used%20iPhone%2012"
-                   class="buy-btn" target="_blank">Buy</a>
-            </div>
-
-            <div class="product-card">
-                <h4>Gaming Headset — £35</h4>
-                <p>Clean • Works perfectly • RGB lights</p>
-                <a href="https://wa.me/447512345678?text=Hi%20Rumaan,%20I%20want%20the%20Gaming%20Headset"
-                   class="buy-btn" target="_blank">Buy</a>
-            </div>
-
-            <div class="product-card">
-                <h4>Bluetooth Speaker — £20</h4>
-                <p>Loud • Deep bass • Portable</p>
-                <a href="https://wa.me/447833914552?text=Hi%20Rumaan,%20I%20want%20the%20Bluetooth%20Speaker"
-                   class="buy-btn" target="_blank">Buy</a>
-            </div>
-        </div>
-
+    <div class="product-card">
+      <h4>Gaming Headset — £35</h4>
+      <p>Clean • Works perfectly • RGB lights</p>
+      <a href="https://wa.me/447512345678?text=Hi%20Rumaan,%20I%20want%20the%20Gaming%20Headset"
+         class="buy-btn" target="_blank">Buy</a>
     </div>
 
-    <!-- VICTORY SCREEN -->
-    <div id="victory-screen">
-        <div class="victory-content">
-            <h1>🔥 VICTORY! The Lava Titan Falls 🔥</h1>
-            <p>You unlocked special deals:</p>
-
-            <div id="loot">
-                <div class="loot-item">
-                    🔥 iPhone 12 – 10% Off<br>
-                    <a href="https://wa.me/447512345678?text=I%20beat%20the%20Titan%20and%20want%20the%20iPhone%20deal!"
-                       target="_blank">Claim Deal</a>
-                </div>
-
-                <div class="loot-item">
-                    🎧 Gaming Headset – 15% Off<br>
-                    <a href="https://wa.me/447512345678?text=I%20beat%20the%20Titan%20and%20want%20the%20Headset%20deal!"
-                       target="_blank">Claim Deal</a>
-                </div>
-
-                <div class="loot-item">
-                    🔊 Bluetooth Speaker – 20% Off<br>
-                    <a href="https://wa.me/447833914552?text=I%20beat%20the%20Titan%20and%20want%20the%20Speaker%20deal!"
-                       target="_blank">Claim Deal</a>
-                </div>
-            </div>
-
-            <button id="reset-btn">Reset Fight</button>
-        </div>
+    <div class="product-card">
+      <h4>Bluetooth Speaker — £20</h4>
+      <p>Loud • Deep bass • Portable</p>
+      <a href="https://wa.me/447833914552?text=Hi%20Rumaan,%20I%20want%20the%20Bluetooth%20Speaker"
+         class="buy-btn" target="_blank">Buy</a>
     </div>
+  </section>
 
-    <script src="game.js"></script>
+  <!-- Load Three.js Showroom Script -->
+  <script type="module" src="game.js"></script>
 </body>
 </html>
