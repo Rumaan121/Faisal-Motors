@@ -1,130 +1,108 @@
-let bossMaxHp = 100;
-let bossHp = bossMaxHp;
-let playerHp = 100;
-let playerMana = 100;
-let difficulty = 'easy';
+// 🚗 Car Showroom Explorer with Interior Dive
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import TWEEN from '@tweenjs/tween.js'; // install via npm or include script
 
-const bossHpFill = document.getElementById('boss-hp-fill');
-const bossEl = document.getElementById('boss');
-const titanDialogue = document.getElementById('titan-dialogue');
-const playerHpFill = document.getElementById('player-hp');
-const playerManaFill = document.getElementById('player-mana');
-const hpLabel = document.getElementById('hp-label');
-const manaLabel = document.getElementById('mana-label');
-const victoryScreen = document.getElementById('victory-screen');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x111111);
 
-const titanLines = [
-    { hp: 80, text: "You dare enter my molten domain?" },
-    { hp: 60, text: "The core trembles with your defiance..." },
-    { hp: 40, text: "You will be buried in magma." },
-    { hp: 20, text: "My flames... they weaken..." },
-    { hp: 5,  text: "No... this cannot be..." }
-];
+// Camera
+const camera = new THREE.PerspectiveCamera(
+  75, window.innerWidth / window.innerHeight, 0.1, 1000
+);
+camera.position.set(0, 2, 6);
 
-function updateBossHp() {
-    const percent = Math.max(0, (bossHp / bossMaxHp) * 100);
-    bossHpFill.style.width = percent + "%";
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById("arena").appendChild(renderer.domElement);
 
-    bossEl.classList.remove('phase2', 'phase3');
-    if (percent <= 60 && percent > 20) bossEl.classList.add('phase2');
-    if (percent <= 20) bossEl.classList.add('phase3');
+// Lighting
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+scene.add(hemiLight);
 
-    const line = titanLines.find(l => percent <= l.hp);
-    if (line) titanDialogue.innerText = line.text;
+const spotLight = new THREE.SpotLight(0xffffff, 1.2);
+spotLight.position.set(5, 10, 5);
+spotLight.castShadow = true;
+scene.add(spotLight);
 
-    if (percent <= 20) {
-        document.body.classList.add('quake');
-    } else {
-        document.body.classList.remove('quake');
-    }
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enableZoom = true;
+controls.enablePan = true;
+controls.minDistance = 0.5;
+controls.maxDistance = 10;
 
-    if (percent <= 0) {
-        bossHp = 0;
-        showVictory();
-    }
-}
+// Raycaster
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 
-function updatePlayerHud() {
-    playerHp = Math.max(0, playerHp);
-    playerMana = Math.max(0, playerMana);
-    playerHpFill.style.width = playerHp + "%";
-    playerManaFill.style.width = playerMana + "%";
-    hpLabel.innerText = Math.round(playerHp) + "%";
-    manaLabel.innerText = Math.round(playerMana) + "%";
-}
-
-function showVictory() {
-    victoryScreen.classList.add('active');
-}
-
-function resetGame() {
-    bossMaxHp = 100;
-    bossHp = bossMaxHp;
-    playerHp = 100;
-    playerMana = 100;
-    updateBossHp();
-    updatePlayerHud();
-    victoryScreen.classList.remove('active');
-    document.body.classList.remove('quake');
-}
-
-const diffButtons = document.querySelectorAll('#difficulty button');
-diffButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        diffButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        difficulty = btn.dataset.mode;
-
-        if (difficulty === 'easy') bossMaxHp = 80;
-        if (difficulty === 'normal') bossMaxHp = 100;
-        if (difficulty === 'hard') bossMaxHp = 140;
-
-        bossHp = bossMaxHp;
-        updateBossHp();
-    });
+// Load Car Model (make sure file is in My Website/models/bmw_i7.glb)
+const loader = new GLTFLoader();
+let carModel;
+loader.load('models/bmw_i7.glb', function(gltf) {
+  carModel = gltf.scene;
+  carModel.scale.set(1.2, 1.2, 1.2);
+  carModel.position.set(0, 0, 0);
+  scene.add(carModel);
+}, undefined, function(error) {
+  console.error("Error loading car model:", error);
 });
 
-window.addEventListener('scroll', () => {
-    const maxScroll = document.body.scrollHeight - window.innerHeight || 1;
-    const progress = window.scrollY / maxScroll;
+// Animate loop
+function animate(time) {
+  requestAnimationFrame(animate);
+  controls.update();
+  TWEEN.update(time);
+  renderer.render(scene, camera);
+}
+animate();
 
-    bossHp = bossMaxHp * (1 - progress);
-    updateBossHp();
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
-    if (difficulty === 'hard') {
-        playerHp = 100 - progress * 40;
-        updatePlayerHud();
+// Camera transition helper
+function moveCameraTo(x, y, z, focusX, focusY, focusZ) {
+  new TWEEN.Tween(camera.position)
+    .to({ x, y, z }, 2000)
+    .easing(TWEEN.Easing.Quadratic.InOut)
+    .start();
+  new TWEEN.Tween(controls.target)
+    .to({ x: focusX, y: focusY, z: focusZ }, 2000)
+    .easing(TWEEN.Easing.Quadratic.InOut)
+    .start();
+}
+
+// Tap detection
+function onClick(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+
+  if (carModel) {
+    const intersects = raycaster.intersectObjects(carModel.children, true);
+    if (intersects.length > 0) {
+      const part = intersects[0].object.name.toLowerCase();
+      console.log("Tapped on:", part);
+
+      if (part.includes("door") || part.includes("windshield")) {
+        // Dive into driver seat
+        moveCameraTo(0, 1, 0.5, 0, 1, 0);
+      } else if (part.includes("seat") || part.includes("dashboard")) {
+        // Focus on dashboard
+        moveCameraTo(0, 1.2, 0.2, 0, 1.2, 0.5);
+      } else {
+        // Reset to exterior view
+        moveCameraTo(0, 2, 6, 0, 1, 0);
+      }
     }
-});
-
-document.getElementById('arena').addEventListener('click', (e) => {
-    if (bossHp <= 0) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const fb = document.createElement('div');
-    fb.classList.add('fireball');
-    fb.style.left = (e.clientX - rect.left) + 'px';
-    fb.style.top = (e.clientY - rect.top) + 'px';
-    e.currentTarget.appendChild(fb);
-    setTimeout(() => fb.remove(), 600);
-
-    let dmg = 5;
-    if (difficulty === 'easy') dmg = 8;
-    if (difficulty === 'normal') dmg = 6;
-    if (difficulty === 'hard') dmg = 4;
-
-    if (playerMana > 0) {
-        bossHp -= dmg;
-        playerMana -= 3;
-        updateBossHp();
-        updatePlayerHud();
-    }
-});
-
-document.getElementById('reset-btn').addEventListener('click', () => {
-    resetGame();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-updateBossHp();
-updatePlayerHud();
+  }
+}
+window.addEventListener('click', onClick);
